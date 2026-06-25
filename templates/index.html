@@ -2,35 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- Esta línea de abajo es la más importante para que se adapte al móvil -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Primer CRUD</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-        .tarea { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-crear { display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
-        .btn-borrar { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-    </style>
+    <!-- Cargamos los estilos profesionales de Bootstrap -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
 </head>
-<body>
-    <h1>Mis Tareas Pendientes</h1>
-    <a href="{{ url_for('create') }}" class="btn-crear">+ Nueva Tarea</a>
-    
-    {% for tarea in tareas %}
-    <div class="tarea">
-        <div>
-            <strong>{{ tarea.titulo }}</strong>
-            <p style="margin: 5px 0 0 0; color: #555;">{{ tarea.descripcion }}</p>
+<body class="bg-light">
+    <div class="container py-4" style="max-width: 600px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0 text-primary fw-bold">Mis Tareas</h1>
+            <a href="{{ url_for('create') }}" class="btn btn-primary fw-bold">+ Nueva</a>
         </div>
-        <!-- Añade este bloque de abajo para los botones -->
-        <div style="display: flex; gap: 10px;">
-            <a href="{{ url_for('update', id=tarea.id) }}" style="background: #ffc107; color: black; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 14px;">Editar</a>
-            <form action="{{ url_for('delete', id=tarea.id) }}" method="POST" style="margin:0;">
-                <button type="submit" class="btn-borrar">Borrar</button>
-            </form>
+        
+        <div class="list-group shadow-sm">
+            {% for tarea in tareas %}
+                <div class="list-group-item d-flex justify-content-between align-items-start p-3">
+                    <div class="ms-2 me-auto text-truncate" style="max-width: 70%;">
+                        <div class="fw-bold fs-5 text-dark">{{ tarea.titulo }}</div>
+                        <span class="text-secondary text-wrap fs-6 d-block mt-1">{{ tarea.descripcion }}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('update', id=tarea.id) }}" class="btn btn-sm btn-warning fw-bold">Editar</a>
+                        <form action="{{ url_for('delete', id=tarea.id) }}" method="POST" style="margin:0;">
+                            <button type="submit" class="btn btn-sm btn-danger fw-bold">Borrar</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="list-group-item text-center p-4 text-muted">
+                    No hay tareas pendientes. ¡Crea una nueva!
+                </div>
+            {% endfor %}
         </div>
     </div>
-    
-    {% else %}
-        <p>No hay tareas. ¡Crea una nueva!</p>
-    {% endfor %}
 </body>
 </html>
