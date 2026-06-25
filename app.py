@@ -1,12 +1,26 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import os
+from database import init_db
 
 app = Flask(__name__)
 
+# Esto le indica a internet que cree la base de datos al encender
+init_db()
+
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    # Si la web corre en internet (Render), usa la carpeta segura /tmp
+    if os.environ.get('RENDER'):
+        db_path = '/tmp/database.db'
+    else:
+        # Si corre en tu MacBook Air, usa tu carpeta del Escritorio
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(base_dir, 'database.db')
+        
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
+
 
 # LEER (Read) - Muestra todas las tareas
 @app.route('/')

@@ -1,7 +1,15 @@
 import sqlite3
+import os
 
 def init_db():
-    conn = sqlite3.connect('database.db')
+    # En internet usamos la carpeta temporal '/tmp', en tu Mac usa la carpeta normal
+    if os.environ.get('RENDER'):
+        db_path = '/tmp/database.db'
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(base_dir, 'database.db')
+        
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS tareas (
