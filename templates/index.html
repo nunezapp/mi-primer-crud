@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Primer CRUD</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+        .tarea { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-crear { display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
+        .btn-borrar { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Mis Tareas Pendientes</h1>
+    <a href="{{ url_for('create') }}" class="btn-crear">+ Nueva Tarea</a>
+    
+    {% for tarea in tareas %}
+    <div class="tarea">
+        <div>
+            <strong>{{ tarea.titulo }}</strong>
+            <p style="margin: 5px 0 0 0; color: #555;">{{ tarea.descripcion }}</p>
+        </div>
+        <!-- Añade este bloque de abajo para los botones -->
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('update', id=tarea.id) }}" style="background: #ffc107; color: black; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 14px;">Editar</a>
+            <form action="{{ url_for('delete', id=tarea.id) }}" method="POST" style="margin:0;">
+                <button type="submit" class="btn-borrar">Borrar</button>
+            </form>
+        </div>
+    </div>
+    
+    {% else %}
+        <p>No hay tareas. ¡Crea una nueva!</p>
+    {% endfor %}
+</body>
+</html>
